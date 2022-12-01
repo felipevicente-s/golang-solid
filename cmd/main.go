@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	with3 "solid/solid/lsp/with"
+	without3 "solid/solid/lsp/without"
 	with2 "solid/solid/ocp/with"
 	without2 "solid/solid/ocp/without"
 	"solid/solid/srp"
@@ -47,4 +49,23 @@ func main() {
 	facade := with2.CalculatorFacade{}
 	facade.Calculate(1, 2, &with2.Addition{})
 	facade.Calculate(10, 25, &with2.Multiplication{})
+	facade.Calculate(20, 10, &with2.Division{})
+
+	//END IMPLEMENTED WITH OCP
+
+	//START IMPLEMENTED WITHOUT LSP
+	car := without3.Car{Door: 4, Vehicle: without3.Vehicle{Wheel: 4, Engine: "1.0", Color: "white", Model: "gol", Brand: "vw"}}
+	horse := without3.Horse{Legs: 4, Vehicle: without3.Vehicle{Wheel: 4, Engine: "1.0", Color: "white", Model: "gol", Brand: "vw"}}
+
+	car.Vehicle.TurnOn()
+	horse.Vehicle.TurnOn()
+	//END IMPLEMENTED WITHOUT LSP
+
+	//START IMPLEMENTED WITH LSP
+	carWith := with3.CarWith{Door: 4, MotorVehicle: with3.MotorVehicle{Wheel: 4, Engine: "1.0", Color: "white", Model: "gol", Brand: "vw"}}
+	horseWith := with3.HorseWith{Legs: 4, PulledVehicles: with3.PulledVehicles{Name: "Pé de pano", Power: "10N"}}
+
+	carWith.TurnOn()
+	horseWith.Pull()
+
 }
