@@ -2,6 +2,11 @@ package main
 
 import (
 	"log"
+	with6 "solid/solid/dip/with"
+	without5 "solid/solid/dip/without"
+	"solid/solid/isp"
+	with4 "solid/solid/isp/with"
+	without4 "solid/solid/isp/without"
 	with3 "solid/solid/lsp/with"
 	without3 "solid/solid/lsp/without"
 	with2 "solid/solid/ocp/with"
@@ -67,5 +72,48 @@ func main() {
 
 	carWith.TurnOn()
 	horseWith.Pull()
+	//END IMPLEMENTED WITH LSP
 
+	//START IMPLMENTED WITHOUT ISP
+	order := isp.Order{
+		Status: "PENDING",
+	}
+
+	approved := without4.OrderApproved{}
+	approved.Next(&order)
+
+	canceled := without4.OrderCanceled{}
+	canceled.Next(&order)
+
+	log.Println(order.Status)
+	//END IMPLEMENTED WITHOUT ISP
+
+	//START IMPLEMENTED WITH ISP
+	approvedWith := with4.OrderApprovedWith{}
+	approvedWith.Next(&order)
+	log.Println(order.Status)
+	approvedWith.Prev(&order)
+	log.Println(order.Status)
+
+	failedWith := with4.OrderFailedWith{}
+	failedWith.Cancel(&order)
+	log.Println(order.Status)
+
+	failedWith.Prev(&order)
+	log.Println(order.Status)
+	//END IMPLEMENTED WITH ISP
+
+	//START IMPLEMENTED WITHOUT DIP
+	person := without5.PayrollLegalPerson{}
+	person.Pay(5000.00)
+
+	physicalPerson := without5.PayrollPhysicalPerson{}
+	physicalPerson.Pay(5000.00)
+	//END IMPLEMENTED WITHOUT DIP
+
+	//START IMPLEMENTED WITH DIP
+	payrollFacade := with6.PayrollFacade{}
+	payrollFacade.Infer(&with6.PayrollLegalPersonImpl{}, 5000.00)
+
+	payrollFacade.Infer(&with6.PayrollPhysicalPersonImpl{}, 5000.00)
 }
